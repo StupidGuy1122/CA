@@ -41,6 +41,7 @@ class PlayFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_play, container, false)
         val cacheDir = requireContext().cacheDir
+        setupAdView(view)
         username = arguments?.getString("username") ?: "Unknown"
         selectedBitmaps = (0 until 6).mapNotNull { index ->
             val file = File(cacheDir, "selected_image_$index.png")
