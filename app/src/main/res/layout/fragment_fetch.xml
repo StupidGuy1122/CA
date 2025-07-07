@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/app_background_img"
+        android:scaleType="centerCrop"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <EditText
+            android:id="@+id/urlInput"
+            android:layout_width="240dp"
+            android:layout_height="43dp"
+            android:hint="please enter link"
+            android:importantForAutofill="no"
+            android:inputType="textUri"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fetchBtn"
+            app:layout_constraintHorizontal_bias="0.228"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.070" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/fetchBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:text="fetch"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/urlInput"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.070" />
+
+        <GridLayout
+            android:id="@+id/photoGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="4"
+            android:rowCount="5"
+            android:alignmentMode="alignMargins"
+            android:useDefaultMargins="true"
+            android:padding="8dp"
+            app:layout_constraintTop_toBottomOf="@id/urlInput"
+            app:layout_constraintBottom_toTopOf="@id/startGameBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image1"
+                app:layout_gravity="left|top" />
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image2"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image3"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image4"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image5"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image6"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image7"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image8"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image9"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image10"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image11"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image12"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image13"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image14"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image15"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image16"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image17"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image18"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image19"
+                app:layout_gravity="left|top"/>
+
+            <ImageView style="@style/dlImgStyle"
+                android:id="@+id/image20"
+                app:layout_gravity="left|top"/>
+
+
+
+        </GridLayout>
+
+        <TextView
+            android:id="@+id/selectText"
+            android:textColor="#292525"
+            android:fontFamily="cursive"
+            android:textSize="18sp"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/startGameBtn"
+            app:layout_constraintTop_toBottomOf="@id/photoGrid"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.8"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/startGameBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:text="play"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/photoGrid"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_bias="0.885"
+            android:visibility="invisible"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="200dp"
+            android:layout_height="16dp"
+            android:progress="5"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/photoGrid"
+            app:layout_constraintVertical_bias="0.3"/>
+
+        <TextView
+            android:id="@+id/progressText"
+            android:textColor="#292525"
+            android:fontFamily="cursive"
+            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progressBar"
+            app:layout_constraintVertical_bias="0.2"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

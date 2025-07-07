@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.ca.LoginFragment"
+        android:label="Login">
+        <action
+            android:id="@+id/action_login_to_fetch"
+            app:destination="@id/fetchFragment">
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/fetchFragment"
+        android:name="com.example.ca.FetchFragment"
+        android:label="Fetch">
+        <argument
+            android:name="username"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_fetch_to_play"
+            app:destination="@id/playFragment">
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/playFragment"
+        android:name="com.example.ca.PlayFragment"
+        android:label="Play">
+        <argument
+            android:name="username"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_play_to_leaderboard"
+            app:destination="@id/leaderboardFragment">
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/leaderboardFragment"
+        android:name="com.example.ca.LeaderboardFragment"
+        android:label="Leaderboard">
+        <argument
+            android:name="username"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_leaderboard_to_fetch"
+            app:destination="@id/fetchFragment" />
+    </fragment>
+
+</navigation>
