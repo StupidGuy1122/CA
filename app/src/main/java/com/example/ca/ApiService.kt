@@ -38,6 +38,9 @@ interface ApiService {
     @GET("/URL/getImageUrls")
     suspend fun getImageUrls(@Query("url") url: String): List<String>
 
+    @GET("/User/checkUserType")
+    suspend fun checkUserType(): Response<String>
+
     companion object {
         private const val BASE_URL = "http://10.0.2.2:5114/"
 
@@ -86,6 +89,14 @@ interface ApiService {
             }
         }
 
+        suspend fun getUserType(): String {
+            val response = instance.checkUserType()
+            return if (response.isSuccessful) {
+                response.body() ?: "Unknown"
+            } else {
+                throw Exception("获取用户类型失败：${response.message()}")
+            }
+        }
 
     }
 }

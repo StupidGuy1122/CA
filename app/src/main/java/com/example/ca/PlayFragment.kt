@@ -29,6 +29,8 @@ class PlayFragment : Fragment() {
     private lateinit var selectedBitmaps: List<Bitmap>
     private lateinit var imageViews: List<ImageView>
     private lateinit var timerTextView: TextView
+    private lateinit var adRefreshHandler: Handler
+    private lateinit var adRefreshRunnable: Runnable
     private val flippedCards = mutableListOf<ImageView>()
     private var isChecking = false
     private var seconds = 0
@@ -42,7 +44,7 @@ class PlayFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_play, container, false)
         val cacheDir = requireContext().cacheDir
-        setupAdView(view)
+
         username = arguments?.getString("username") ?: "Unknown"
         selectedBitmaps = (0 until 6).mapNotNull { index ->
             val file = File(cacheDir, "selected_image_$index.png")
@@ -52,8 +54,6 @@ class PlayFragment : Fragment() {
                 null
             }
         }
-        Log.d("PlayFragment", "username = $username")
-
         val imageViewIds = listOf(
             R.id.image1, R.id.image2, R.id.image3,
             R.id.image4, R.id.image5, R.id.image6,
@@ -77,22 +77,42 @@ class PlayFragment : Fragment() {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        lifecycleScope.launch {
+            try {
+                val userType = ApiService.getUserType()
+                if (userType != "VIP") {
+                    setupAdView(view) // 非 VIP 才加载广告并定时刷新
+                } else {
+                    view.findViewById<AdView>(R.id.adView).visibility = View.GONE
+                }
+            } catch (e: Exception) {
+                Log.e("PlayFragment", "获取用户类型失败：${e.message}")
+            }
+        }
+    }
+
+
     private fun setupAdView(view: View) {
         MobileAds.initialize(requireContext()) {}
 
         adView = view.findViewById(R.id.adView)
-
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
 
-        val adRefreshHandler = Handler(Looper.getMainLooper())
-        adRefreshHandler.postDelayed(object : Runnable {
+        // 初始化刷新逻辑
+        adRefreshHandler = Handler(Looper.getMainLooper())
+        adRefreshRunnable = object : Runnable {
             override fun run() {
                 adView.loadAd(AdRequest.Builder().build())
-                adRefreshHandler.postDelayed(this, 10000)
+                adRefreshHandler.postDelayed(this, 30_000) // 每 30 秒刷新一次
             }
-        }, 10000)
+        }
+        adRefreshHandler.postDelayed(adRefreshRunnable, 30_000)
     }
+
 
     private fun resetGame() {
         seconds = 0
@@ -196,5 +216,8 @@ class PlayFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         handler.removeCallbacks(runnable)
+        if (::adRefreshHandler.isInitialized && ::adRefreshRunnable.isInitialized) {
+            adRefreshHandler.removeCallbacks(adRefreshRunnable)
+        }
     }
 }
