@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -182,8 +183,9 @@ class PlayFragment : Fragment() {
                     val bundle = Bundle().apply {
                         putString("username", username)
                     }
-                    findNavController().navigate(R.id.action_play_to_leaderboard, bundle)
                     ApiService.submitScore(username, timeInSeconds)
+                    findNavController().navigate(R.id.action_play_to_leaderboard, bundle)
+
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), "上传成绩失败：${e.message}", Toast.LENGTH_SHORT).show()
                 }

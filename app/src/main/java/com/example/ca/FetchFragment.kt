@@ -16,7 +16,7 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.regex.Pattern
+
 
 class FetchFragment : Fragment() {
 
@@ -29,7 +29,6 @@ class FetchFragment : Fragment() {
     private lateinit var selectText: TextView
     private lateinit var username: String
 
-    private val IMGURL_REG = "<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>"
     private val maxImages = 20
     private var fetchJob: Job? = null
 
@@ -62,10 +61,9 @@ class FetchFragment : Fragment() {
             val selected = photoGrid.children
                 .filter { it.tag is Bitmap && it.alpha == 0.5f }
                 .map { it.tag as Bitmap }
-                .take(6)
                 .toList()
 
-            if (selected.size < 6) {
+            if (selected.size != 6) {
                 showToast("请选择 6 张图片")
                 return@setOnClickListener
             }
@@ -92,20 +90,12 @@ class FetchFragment : Fragment() {
             val bitmaps = withContext(Dispatchers.IO) {
                 val result = mutableListOf<Bitmap>()
                 try {
-                    val html = URL(url).readText()
-                    val pattern = Pattern.compile(IMGURL_REG)
-                    val matcher = pattern.matcher(html)
-
-                    val imageUrls = mutableListOf<String>()
-                    while (matcher.find()) {
-                        val src = matcher.group(1)
-                        val absoluteUrl = URL(URL(url), src).toString()
-                        imageUrls.add(absoluteUrl)
-                        if (imageUrls.size >= maxImages) break
-                    }
-
+                    val imageUrls = ApiService.getImageUrls(url)
+                    Log.d("FetchFragment", "获取到 ${imageUrls.size} 张图片链接")
+                    imageUrls.forEachIndexed { index, link ->
+                        Log.d("FetchFragment", "[$index] $link")}
                     for ((index, imgUrl) in imageUrls.withIndex()) {
-                        ensureActive() // 支持取消
+                        ensureActive()
                         try {
                             val bitmap = downloadBitmap(imgUrl)
                             if (bitmap != null) {
@@ -114,16 +104,16 @@ class FetchFragment : Fragment() {
                                     progressText.text = "下载中：${index + 1}/${imageUrls.size}"
                                 }
                             }
+                            if (result.size >= maxImages) break
                         } catch (e: Exception) {
                             Log.e("FetchFragment", "下载失败: $imgUrl", e)
                         }
                     }
                 } catch (e: Exception) {
-                    Log.e("FetchFragment", "解析失败", e)
+                    Log.e("FetchFragment", "图片链接获取失败", e)
                 }
                 result
             }
-
             progressBar.visibility = View.INVISIBLE
             progressText.visibility = View.INVISIBLE
             photoGrid.visibility = View.VISIBLE
@@ -132,7 +122,6 @@ class FetchFragment : Fragment() {
                 showToast("未找到图片")
                 return@launch
             }
-
             for (i in 0 until photoGrid.childCount) {
                 val imageView = photoGrid.getChildAt(i) as ImageView
                 if (i < bitmaps.size) {
@@ -149,13 +138,13 @@ class FetchFragment : Fragment() {
                     imageView.tag = null
                 }
             }
-
             startGameBtn.visibility = View.VISIBLE
         }
     }
 
     private fun downloadBitmap(url: String): Bitmap? {
         val connection = URL(url).openConnection() as HttpURLConnection
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0")
         connection.connectTimeout = 5000
         connection.readTimeout = 5000
         connection.doInput = true

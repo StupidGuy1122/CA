@@ -7,6 +7,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 
 // 数据模型
@@ -33,6 +34,9 @@ interface ApiService {
 
     @POST("User/Login")
     suspend fun login(@Body loginValid: LoginValid): Response<String>
+
+    @GET("/URL/getImageUrls")
+    suspend fun getImageUrls(@Query("url") url: String): List<String>
 
     companion object {
         private const val BASE_URL = "http://10.0.2.2:5114/"
@@ -67,6 +71,22 @@ interface ApiService {
                 throw Exception("请求失败：${response.message()}")
             }
         }
+
+        suspend fun getImageUrls(url: String): List<String> {
+            return try {
+                val validExtensions = listOf(".jpg", ".jpeg", ".png", ".webp", ".bmp")
+                instance.getImageUrls(url)
+                    .filter { it.startsWith("http") || it.startsWith("https") }
+                    .filter { link ->
+                        validExtensions.any { ext -> link.lowercase().contains(ext) }
+                    }
+                    .take(20)
+            } catch (e: Exception) {
+                throw Exception("获取图片链接失败：${e.message}")
+            }
+        }
+
+
     }
 }
 
